@@ -9,8 +9,7 @@ import 'package:ok_flutter/util/jump_util.dart';
 import 'login/register.dart';
 
 void main() {
-  Bmob.initMasterKey("b3245f9c0070e1f70f839d41a9a4b4bd",
-      "cc2a8872e2af149661421a2173043665", "aa21464ed7e8ff4ad130c91182edaff4");
+  Bmob.init(Content.appId, Content.apiKey);
   runApp(SplashPageView());
 }
 

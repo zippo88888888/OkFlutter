@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 class Content {
 
+  static const appId = "b3245f9c0070e1f70f839d41a9a4b4bd";
+  static const apiKey = "cc2a8872e2af149661421a2173043665";
+  static const masterKey = "aa21464ed7e8ff4ad130c91182edaff4";
+
   static const noting = 1;
   static const adminError = 2;
   static const elseError = 3;
