@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/util/jump_util.dart';
+import 'package:ok_flutter/util/user_util.dart';
 
 import 'login/register.dart';
 
@@ -32,8 +33,14 @@ class _SplashPageState extends State<StatefulWidget> {
 
   _init() {
     if (_timer == null) {
-      _timer = Timer(Duration(milliseconds: 2500), () {
-        JumpUtil.jumpToLoginPage2(context);
+      _timer = Timer(Duration(milliseconds: 2000), () {
+        UserUtil.isLogin((isLogin) {
+          if (isLogin == null || !isLogin) {
+            JumpUtil.jumpToLoginPage2(context);
+          } else {
+            JumpUtil.jumpToMainPage2(context);
+          }
+        });
       });
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
+import 'package:ok_flutter/ui/login/register.dart';
 import 'package:ok_flutter/util/bmob_util.dart';
 import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
@@ -44,7 +45,7 @@ class _LoginPageState extends State<StatefulWidget> {
 
   // 初始化数据
   initParams() {
-    _name = "好大一个月";
+    _name = "";
     nameController.value = TextEditingValue(text: _name);
   }
 
@@ -174,9 +175,7 @@ class _LoginPageState extends State<StatefulWidget> {
           margin: EdgeInsets.only(left: 30, right: 30, top: 10),
           constraints: BoxConstraints(minWidth: double.infinity),
           child: FlatButton(
-            onPressed: () {
-              JumpUtil.jumpToRegisterPage(context);
-            },
+            onPressed: () => _toRegisterPage(),
             child: Text(
               "注册",
             ),
@@ -190,5 +189,19 @@ class _LoginPageState extends State<StatefulWidget> {
         ),
       ],
     );
+  }
+
+  _toRegisterPage() {
+    Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new RegisterPageView()))
+        .then((any) {
+      if (any != null) {
+        setState(() {
+          var resultData = any as List<String>;
+          _name = resultData[0];
+          _pwd = resultData[1];
+        });
+      }
+    });
   }
 }

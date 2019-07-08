@@ -4,34 +4,102 @@ import 'package:flutter/cupertino.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/bean/user.dart';
 import 'package:ok_flutter/util/system_util.dart';
+import 'package:ok_flutter/util/user_util.dart';
+
+import 'jump_util.dart';
 
 class BmobUtil {
   /// 登录
-  static void login(BuildContext context, String name, String pwd) {
+  static void login(BuildContext context, String name, String pwd,
+      [Function function]) {
+    SystemUtil.showLoadingDialog(context: context);
     BmobQuery<FlutterUser> query = BmobQuery();
     query.addWhereEqualTo("userName", name);
     query.addWhereEqualTo("userPwd", pwd);
     query.queryObjects().then((data) {
       var list = data.map((i) => FlutterUser.fromJson(i)).toList();
-      if(list != null && list.isNotEmpty) {
+      if (list != null && list.isNotEmpty) {
         var user = list[0];
-        switch(user.userStatus) {
+        switch (user.userStatus) {
           case Content.noting:
+            UserUtil.loginIn(user);
             SystemUtil.showToast(msg: "登录成功！");
+            SystemUtil.dismissDialog();
+            if (function == null) {
+              JumpUtil.jumpToMainPage2(context);
+            } else {
+              function(true);
+            }
             break;
           case Content.adminError:
+            if (function != null) function(false);
             SystemUtil.showToast(msg: "当前账号已被管理员冻结，请联系管理员！");
+            SystemUtil.dismissDialog();
             break;
           case Content.elseError:
           default:
-          SystemUtil.showToast(msg: "未知异常，请联系管理员");
+          if (function != null) function(false);
+            SystemUtil.showToast(msg: "未知异常，请联系管理员");
+            SystemUtil.dismissDialog();
             break;
         }
       } else {
+        if (function != null) function(false);
         SystemUtil.showToast(msg: "用户名或密码错误！");
+        SystemUtil.dismissDialog();
       }
-    }).catchError((e){
+    }).catchError((e) {
+      if (function != null) function(false);
       print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "未知异常，请联系管理员");
+      SystemUtil.dismissDialog();
+    });
+  }
+
+  static void selectByName(String name, Function function) {
+    BmobQuery<FlutterUser> query = BmobQuery();
+    query.addWhereEqualTo("userName", name);
+    query.queryObjects().then((data) {
+      var list = data.map((i) => FlutterUser.fromJson(i)).toList();
+      if (list != null && list.isNotEmpty) {
+        function(false);
+        SystemUtil.showToast(msg: "该用户名已被占用，请重新输入");
+      } else {
+        function(true);
+        print("该用户名可以使用");
+      }
+    }).catchError((e) {
+      if (function != null) function(false);
+      print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "未知异常，请联系管理员");
+    });
+  }
+
+  /// 注册
+  static void register(BuildContext context, String name, String pwd, int age,
+      [Function function]) {
+    SystemUtil.showLoadingDialog(context: context);
+    var flutterUser = FlutterUser();
+    flutterUser.userName = name;
+    flutterUser.userPwd = pwd;
+    flutterUser.userAge = age;
+    flutterUser.save().then((savedData) {
+      var objectId = savedData.objectId;
+      if (objectId != null && objectId.length >= 0) {
+        SystemUtil.dismissDialog();
+        if (function == null) {
+          JumpUtil.jumpToLoginPage2(context);
+        } else {
+          function(true);
+        }
+      } else {
+        SystemUtil.showToast(msg: "注册失败，请联系管理员");
+        SystemUtil.dismissDialog();
+      }
+    }).catchError((e) {
+      print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "注册失败，请联系管理员");
+      SystemUtil.dismissDialog();
     });
   }
 }
