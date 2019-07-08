@@ -59,7 +59,7 @@ class _MyHomeDrawerState extends State<StatefulWidget> {
       if (newIcon != null && newIcon.length > 0 && "null" != newIcon) {
         _userIcon = newIcon;
       } else {
-        _userIcon = Content.gg;
+        _userIcon = Content.userIcon1;
       }
     });
     UserUtil.getName((name) => _userName = name.toString() ?? "OKFlutter");

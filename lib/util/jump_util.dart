@@ -23,6 +23,7 @@ class JumpUtil {
     _toPage(context, new LoginPageView());
   }
 
+  // TODO 这样做因为之前没找到对的BuildContext，阿西吧 Flutter里面全叫context，后面再修改吧
   /// 跳转至登录页面
   static jumpToLoginPage2(BuildContext context) {
     Navigator.pushAndRemoveUntil(
