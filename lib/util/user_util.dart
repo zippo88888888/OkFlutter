@@ -9,32 +9,24 @@ class UserUtil {
   }
 
   static _saveUserData(FlutterUser user) {
+    SPUtil.save(SPUtil.SP_KEY_ID, user.userId);
     SPUtil.save(SPUtil.SP_KEY_NAME, user.userName);
     SPUtil.save(SPUtil.SP_KEY_ICON, user.userIcon);
     SPUtil.save(SPUtil.SP_KEY_SEX, user.userSex);
     SPUtil.save(SPUtil.SP_KEY_TIME, user.createdAt);
   }
 
-  static isLogin(Function function) {
-    SPUtil.get(SPUtil.SP_KEY_LOGIN)
-        .then((isLogin) => function(isLogin as bool));
-  }
+  static bool isLogin() => SPUtil.get(SPUtil.SP_KEY_LOGIN, false) as bool;
 
-  static getSex(Function function) {
-    SPUtil.get(SPUtil.SP_KEY_SEX).then((sex) => function(sex as bool));
-  }
+  static int getUserId() => SPUtil.get(SPUtil.SP_KEY_ID, 1) as int;
 
-  static getTime(Function function) {
-    SPUtil.get(SPUtil.SP_KEY_TIME).then((value) => function(value.toString()));
-  }
+  static bool getSex() => SPUtil.get(SPUtil.SP_KEY_SEX, true) as bool;
 
-  static getName(Function function) {
-    SPUtil.get(SPUtil.SP_KEY_NAME).then((value) => function(value.toString()));
-  }
+  static String getTime() => SPUtil.get(SPUtil.SP_KEY_TIME, "") as String;
 
-  static getIcon(Function function) {
-    SPUtil.get(SPUtil.SP_KEY_ICON).then((value) => function(value.toString()));
-  }
+  static String getName() => SPUtil.get(SPUtil.SP_KEY_NAME, "") as String;
+
+  static String getIcon() => SPUtil.get(SPUtil.SP_KEY_ICON, "") as String;
 
   static loginOut([Function function]) {
     SPUtil.clear();

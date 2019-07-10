@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/util/jump_util.dart';
+import 'package:ok_flutter/util/preferences.dart';
 import 'package:ok_flutter/util/user_util.dart';
 
 import 'login/register.dart';
 
 void main() {
   Bmob.init(Content.appId, Content.apiKey);
+  SPUtil.initSharedPreferences();
   runApp(SplashPageView());
 }
 
@@ -34,13 +36,11 @@ class _SplashPageState extends State<StatefulWidget> {
   _init() {
     if (_timer == null) {
       _timer = Timer(Duration(milliseconds: 2000), () {
-        UserUtil.isLogin((isLogin) {
-          if (isLogin == null || !isLogin) {
-            JumpUtil.jumpToLoginPage2(context);
-          } else {
-            JumpUtil.jumpToMainPage2(context);
-          }
-        });
+        if (UserUtil.isLogin()) {
+          JumpUtil.jumpToMainPage2(context);
+        } else {
+          JumpUtil.jumpToLoginPage2(context);
+        }
       });
     }
   }

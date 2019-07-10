@@ -2,6 +2,7 @@ import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:data_plugin/bmob/response/bmob_error.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ok_flutter/base/content.dart';
+import 'package:ok_flutter/bean/news.dart';
 import 'package:ok_flutter/bean/user.dart';
 import 'package:ok_flutter/util/system_util.dart';
 import 'package:ok_flutter/util/user_util.dart';
@@ -11,7 +12,7 @@ import 'jump_util.dart';
 class BmobUtil {
   /// 登录
   static void login(BuildContext context, String name, String pwd,
-      [Function function]) {
+      [Function(bool) function]) {
     SystemUtil.showLoadingDialog(context: context);
     BmobQuery<FlutterUser> query = BmobQuery();
     query.addWhereEqualTo("userName", name);
@@ -38,7 +39,7 @@ class BmobUtil {
             break;
           case Content.elseError:
           default:
-          if (function != null) function(false);
+            if (function != null) function(false);
             SystemUtil.showToast(msg: "未知异常，请联系管理员");
             SystemUtil.dismissDialog();
             break;
@@ -56,7 +57,7 @@ class BmobUtil {
     });
   }
 
-  static void selectByName(String name, Function function) {
+  static void selectByName(String name, Function(bool) function) {
     BmobQuery<FlutterUser> query = BmobQuery();
     query.addWhereEqualTo("userName", name);
     query.queryObjects().then((data) {
@@ -77,7 +78,7 @@ class BmobUtil {
 
   /// 注册
   static void register(BuildContext context, String name, String pwd, int age,
-      [Function function]) {
+      [Function(bool) function]) {
     SystemUtil.showLoadingDialog(context: context);
     var flutterUser = FlutterUser();
     flutterUser.userName = name;
@@ -100,6 +101,34 @@ class BmobUtil {
       print(BmobError.convert(e).error);
       SystemUtil.showToast(msg: "注册失败，请联系管理员");
       SystemUtil.dismissDialog();
+    });
+  }
+
+  /// 获取新闻数据
+  static void getNewsData(int pageNo, String key, bool myself,
+      Function(bool, List<FlutterContent>) function) {
+    BmobQuery<FlutterContent> query = BmobQuery();
+    if (key.isNotEmpty) {
+      query.addWhereEqualTo("newsTitle", key);
+    }
+    if (myself) {
+      query.addWhereEqualTo("userId", UserUtil.getUserId());
+    }
+    query.setOrder("-createdAt");
+    // 每次查询10条数据
+    query.setLimit(10);
+    if (pageNo == 1) {
+      query.setSkip(0);
+    } else {
+      query.setSkip(pageNo * 10);
+    }
+    query.queryObjects().then((data) {
+      var resultList =
+          data.map((item) => FlutterContent.fromJson(item)).toList();
+      function(true, resultList);
+    }).catchError((e) {
+      print(BmobError.convert(e).error);
+      function(false, new List<FlutterContent>(0));
     });
   }
 }

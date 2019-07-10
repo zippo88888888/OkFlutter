@@ -6,7 +6,6 @@ import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
 import 'package:ok_flutter/util/user_util.dart';
 
-
 /// 首页抽屉
 class MainDrawer extends StatefulWidget {
   @override
@@ -23,29 +22,23 @@ class _MainDrawerState extends State<StatefulWidget> {
 
   final double _itemPicWH = 28.0;
 
-  // TODO 初始化数据  这里还有很大的问题
   _init() {
-    UserUtil.getIcon((icon) {
-      var newIcon = icon.toString();
-      if (newIcon != null && newIcon.length > 0 && "null" != newIcon) {
-        _userIcon = newIcon;
-      } else {
-        _userIcon = Content.userIcon1;
-      }
-    });
-    UserUtil.getName((name) => _userName = name.toString() ?? "OKFlutter");
-    UserUtil.getSex(
-            (sex) => _sex = (sex == null || sex) ? Content.gg : Content.mm);
-    UserUtil.getTime((time) {
-      var newTime = time.toString();
-      if (newTime != null && newTime.length > 0 && "null" != newTime) {
-        var dateTime = DateTime.parse(newTime);
-        _createTime = "${dateTime.year}年${dateTime.month}月加入";
-      } else {
-        _createTime = "2019年7月加入";
-      }
-      setState(() {});
-    });
+    var icon = UserUtil.getIcon();
+    if (icon != null && icon.length > 0 && "null" != icon) {
+      _userIcon = icon;
+    } else {
+      _userIcon = Content.userIcon1;
+    }
+    var name = UserUtil.getName();
+    _userName = name ?? "OKFlutter";
+    _sex = UserUtil.getSex() ? Content.gg : Content.mm;
+    var time = UserUtil.getTime();
+    if (time != null && time.length > 0 && "null" != time) {
+      var dateTime = DateTime.parse(time);
+      _createTime = "${dateTime.year}年${dateTime.month}月加入";
+    } else {
+      _createTime = "2019年7月加入";
+    }
     _items.add(MainNVItemBean(Content.mm, "个人信息"));
     _items.add(MainNVItemBean(Content.mm, "主题更换"));
     _items.add(MainNVItemBean(Content.mm, "关于"));
@@ -71,27 +64,27 @@ class _MainDrawerState extends State<StatefulWidget> {
         showDialog(
             context: context,
             builder: (_context) => AlertDialog(
-              title: Text('温馨提示'),
-              content: Text(('你确定要推出登录吗？')),
-              actions: <Widget>[
-                new FlatButton(
-                  child: new Text("取消"),
-                  onPressed: () {
-                    Navigator.of(_context).pop();
-                  },
-                ),
-                new FlatButton(
-                  child: new Text("确定"),
-                  onPressed: () {
-                    Navigator.of(_context).pop();
-                    UserUtil.loginOut((_) {
-                      SystemUtil.showToast(msg: "退出登录成功");
-                      JumpUtil.jumpToLoginPage2(context);
-                    });
-                  },
-                ),
-              ],
-            ));
+                  title: Text('温馨提示'),
+                  content: Text(('你确定要推出登录吗？')),
+                  actions: <Widget>[
+                    new FlatButton(
+                      child: new Text("取消"),
+                      onPressed: () {
+                        Navigator.of(_context).pop();
+                      },
+                    ),
+                    new FlatButton(
+                      child: new Text("确定"),
+                      onPressed: () {
+                        Navigator.of(_context).pop();
+                        UserUtil.loginOut((_) {
+                          SystemUtil.showToast(msg: "退出登录成功");
+                          JumpUtil.jumpToLoginPage2(context);
+                        });
+                      },
+                    ),
+                  ],
+                ));
 
         break;
     }
@@ -99,8 +92,8 @@ class _MainDrawerState extends State<StatefulWidget> {
 
   @override
   void initState() {
-    super.initState();
     _init();
+    super.initState();
   }
 
   @override

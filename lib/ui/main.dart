@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/widget/main_drawer.dart';
-import 'package:ok_flutter/widget/main_list.dart';
 import 'package:ok_flutter/widget/recyclerview.dart';
 
 class MainPageView extends StatefulWidget {
@@ -64,8 +63,7 @@ class _MainPageView extends State<StatefulWidget>
   List<Widget> _createTabBarView() {
     List<Widget> child = [];
     for (int i = 0; i < _tabs.length; i++) {
-//      child.add(MainList(_tabs[i], i));
-      child.add(RecyclerView());
+      child.add(RecyclerView(_tabs[i], i));
     }
     return child;
   }
