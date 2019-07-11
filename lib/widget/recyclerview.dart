@@ -216,7 +216,7 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
               padding: EdgeInsets.only(left: 10),
               child: Text(
                 "正在加载中...",
-                style: TextStyle(fontSize: 14, color: Content.black),
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
             ),
           ],
@@ -228,7 +228,7 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
         alignment: Alignment(0.0, 0.0),
         child: Text(
           "已经全部加载完毕了",
-          style: TextStyle(fontSize: 14, color: Content.black),
+          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
         ),
       );
     }
