@@ -15,6 +15,8 @@ class Content {
   static const white = Colors.white;
   static const red = Colors.red;
 
+  static const page_size = 10;
+
   static const textSize = 14;
 
   static const titleStyle = TextStyle(fontSize: 18, color: white);

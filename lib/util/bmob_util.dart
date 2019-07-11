@@ -107,6 +107,7 @@ class BmobUtil {
   /// 获取新闻数据
   static void getNewsData(int pageNo, String key, bool myself,
       Function(bool, List<FlutterContent>) function) {
+    print("查询第$pageNo页的数据");
     BmobQuery<FlutterContent> query = BmobQuery();
     if (key.isNotEmpty) {
       query.addWhereEqualTo("newsTitle", key);
@@ -116,12 +117,8 @@ class BmobUtil {
     }
     query.setOrder("-createdAt");
     // 每次查询10条数据
-    query.setLimit(10);
-    if (pageNo == 1) {
-      query.setSkip(0);
-    } else {
-      query.setSkip(pageNo * 10);
-    }
+    query.setLimit(Content.page_size);
+    query.setSkip((pageNo - 1) * Content.page_size);
     query.queryObjects().then((data) {
       var resultList =
           data.map((item) => FlutterContent.fromJson(item)).toList();
@@ -129,6 +126,36 @@ class BmobUtil {
     }).catchError((e) {
       print(BmobError.convert(e).error);
       function(false, new List<FlutterContent>(0));
+    });
+  }
+
+  static void addNes(BuildContext context, String title, String content,
+      [Function(bool) function]) {
+    SystemUtil.showLoadingDialog(context: context);
+    var contentBean = FlutterContent();
+    contentBean.userId = UserUtil.getUserId();
+    contentBean.newsTitle = title;
+    contentBean.newsContent = content;
+    contentBean.likeCount = 1;
+    contentBean.save().then((savedData) {
+      var objectId = savedData.objectId;
+      if (objectId != null && objectId.length >= 0) {
+        if (function == null) {
+          SystemUtil.dismissDialog();
+          Navigator.pop(context);
+        } else {
+          function(true);
+          SystemUtil.dismissDialog();
+        }
+      } else {
+        SystemUtil.showToast(msg: "发布失败，请联系管理员");
+        if (function != null) function(false);
+      }
+    }).catchError((e) {
+      if (function != null) function(false);
+      print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "发布失败，请联系管理员");
+      SystemUtil.dismissDialog();
     });
   }
 }

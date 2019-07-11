@@ -5,6 +5,7 @@ import 'package:ok_flutter/ui/login/register.dart';
 import 'package:ok_flutter/util/bmob_util.dart';
 import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
+import 'package:ok_flutter/util/user_util.dart';
 
 class LoginPageView extends StatelessWidget {
   const LoginPageView();
@@ -45,7 +46,7 @@ class _LoginPageState extends State<StatefulWidget> {
 
   // 初始化数据
   initParams() {
-    _name = "";
+    _name = UserUtil.getName() ?? "";
     nameController.value = TextEditingValue(text: _name);
   }
 
@@ -87,7 +88,7 @@ class _LoginPageState extends State<StatefulWidget> {
             decoration: InputDecoration(
                 hintText: "请输入用户名",
                 hintStyle: TextStyle(color: Color(0xFFBEBEBE), fontSize: 13),
-                labelStyle: TextStyle(color: Color(0xFF000000), fontSize: 13),
+                labelStyle: TextStyle(color: Content.black, fontSize: 13),
                 counterText: "",
                 border: InputBorder.none),
             keyboardType: TextInputType.text,
@@ -120,7 +121,7 @@ class _LoginPageState extends State<StatefulWidget> {
                     hintStyle:
                         TextStyle(color: Color(0xFFBEBEBE), fontSize: 13),
                     labelStyle:
-                        TextStyle(color: Color(0xFF000000), fontSize: 13),
+                        TextStyle(color: Content.black, fontSize: 13),
                     counterText: "",
                     border: InputBorder.none),
                 keyboardType: TextInputType.emailAddress,

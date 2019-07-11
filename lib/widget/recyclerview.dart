@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/bean/news.dart';
 import 'package:ok_flutter/util/bmob_util.dart';
+import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
 
-import 'else_util.dart';
+import 'package:ok_flutter/util/else_util.dart';
 
 // TODO 封装成通用的  类似Adapter ？？？
 class RecyclerView extends StatefulWidget {
@@ -43,7 +44,7 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
         if (isSuccess) {
           if (list != null && list.length > 0) {
             setState(() {
-              _canLoadMore = list.length > 9;
+              _canLoadMore = list.length > Content.page_size - 1;
               _datas.clear();
               _datas.addAll(list);
             });
@@ -64,7 +65,7 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
     });
   }
 
-  /// [needJJ]  分页是否需要加
+  /// [needJJ]  分页是否需要计算
   Future _onLoadMore({bool needJJ = true}) async {
     if (!_canLoadMore) {
       print("不需要再加载更多了");
@@ -131,7 +132,7 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
     } else {
       return GestureDetector(
         onTap: () {
-          SystemUtil.showToast(msg: "查看详情$position");
+          JumpUtil.jumpToInfoPage(context, _datas[position]);
         },
         child: Padding(padding: EdgeInsets.only(
             left: Content.defaultPadding,

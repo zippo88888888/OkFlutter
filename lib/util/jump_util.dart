@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ok_flutter/bean/news.dart';
+import 'package:ok_flutter/ui/add_news.dart';
+import 'package:ok_flutter/ui/info.dart';
 import 'package:ok_flutter/ui/login/login.dart';
 import 'package:ok_flutter/ui/login/register.dart';
 import 'package:ok_flutter/ui/main.dart';
@@ -7,7 +10,6 @@ import 'package:ok_flutter/ui/main.dart';
 // TODO 暂时性的
 /// https://blog.csdn.net/yuzhiqiang_1993/article/details/89090742
 class JumpUtil {
-
   static _toPage(BuildContext context, Widget widget) {
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => widget));
@@ -29,7 +31,7 @@ class JumpUtil {
     Navigator.pushAndRemoveUntil(
         context,
         new MaterialPageRoute(builder: (context) => new LoginPageView()),
-        (dismiss) => dismiss == null);
+            (dismiss) => dismiss == null);
   }
 
   /// 跳转至首页
@@ -42,6 +44,16 @@ class JumpUtil {
     Navigator.pushAndRemoveUntil(
         context,
         new MaterialPageRoute(builder: (context) => new MainPageView()),
-        (dismiss) => dismiss == null);
+            (dismiss) => dismiss == null);
+  }
+
+  /// 跳转至添加页面
+  static jumToAddPage(BuildContext context) {
+    _toPage(context, AddNewsView());
+  }
+
+  /// 跳转至详情页面
+  static jumpToInfoPage(BuildContext context, FlutterContent flutterContent) {
+    _toPage(context, NewsInfoPageView(flutterContent));
   }
 }

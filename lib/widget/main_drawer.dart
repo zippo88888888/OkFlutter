@@ -65,7 +65,7 @@ class _MainDrawerState extends State<StatefulWidget> {
             context: context,
             builder: (_context) => AlertDialog(
                   title: Text('温馨提示'),
-                  content: Text(('你确定要推出登录吗？')),
+                  content: Text(('你确定要退出登录吗？')),
                   actions: <Widget>[
                     new FlatButton(
                       child: new Text("取消"),
@@ -85,7 +85,6 @@ class _MainDrawerState extends State<StatefulWidget> {
                     ),
                   ],
                 ));
-
         break;
     }
   }

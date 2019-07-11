@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
+import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/widget/main_drawer.dart';
 import 'package:ok_flutter/widget/recyclerview.dart';
 
@@ -39,7 +40,9 @@ class _MainPageView extends State<StatefulWidget>
             ),
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {
+                JumpUtil.jumToAddPage(context);
+              },
               color: Content.white,
             )
           ],
