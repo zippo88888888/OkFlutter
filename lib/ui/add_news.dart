@@ -49,6 +49,10 @@ class _AddNewsContentStateView extends State<_AddNewsContentView> {
       SystemUtil.showToast(msg: "内容不能为空");
       return;
     }
+    if (_content.length <= 50) {
+      SystemUtil.showToast(msg: "内容不能少于50个字");
+      return;
+    }
     BmobUtil.addNes(widget.__context, _name, _content, (isSuccess) {
       if (isSuccess) {
         SystemUtil.showToast(msg: "发布成功");
@@ -93,13 +97,13 @@ class _AddNewsContentStateView extends State<_AddNewsContentView> {
           padding: EdgeInsets.only(left: Content.defaultPadding, right: 5),
           child: TextField(
             autocorrect: true,
-            maxLines: 10,
-            maxLength: 500,
+            maxLines: 12,
+            maxLength: 1000,
             onChanged: (value) {
               _content = value;
             },
             decoration: InputDecoration(
-                hintText: "请输入内容（限500字）",
+                hintText: "请输入内容（限1000字）",
                 hintStyle: TextStyle(color: Color(0xFFBEBEBE), fontSize: 13),
                 labelStyle: TextStyle(color: Content.black, fontSize: 13),
                 border: InputBorder.none),
