@@ -136,7 +136,7 @@ class BmobUtil {
     contentBean.userId = UserUtil.getUserId();
     contentBean.newsTitle = title;
     contentBean.newsContent = content;
-    contentBean.likeCount = 1;
+    contentBean.likeCount = 0;
     contentBean.save().then((savedData) {
       var objectId = savedData.objectId;
       if (objectId != null && objectId.length >= 0) {
