@@ -158,4 +158,52 @@ class BmobUtil {
       SystemUtil.dismissDialog();
     });
   }
+
+  /// 点赞
+  static void clickLike(int newsId) {
+    BmobQuery<FlutterContent> query = BmobQuery();
+    query.addWhereEqualTo("newsId", newsId);
+    query.queryObjects().then((data) {
+      var list = data.map((i) => FlutterContent.fromJson(i)).toList();
+      if (list != null && list.isNotEmpty) {
+        var news = list[0];
+        var likeCount = news.likeCount;
+        var content = FlutterContent();
+        content.objectId = news.objectId;
+        content.likeCount = likeCount + 1;
+        content.update().then((bmobUpdated) {
+          SystemUtil.showToast(msg: "点赞成功");
+        }).catchError((e){
+          print(BmobError.convert(e).error);
+          SystemUtil.showToast(msg: "未知异常，请联系管理员");
+        });
+      } else {
+        SystemUtil.showToast(msg: "未知异常，请联系管理员");
+      }
+    }).catchError((e) {
+      print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "未知异常，请联系管理员");
+    });
+
+  }
+
+  /// 根据用户ID获取用户信息   不连表查询了
+  static void getUserById(BuildContext context, int userId,
+      Function(FlutterUser) function) {
+    BmobQuery<FlutterUser> query = BmobQuery();
+    query.addWhereEqualTo("userId", userId);
+    query.queryObjects().then((data) {
+      var list = data.map((i) => FlutterUser.fromJson(i)).toList();
+      if (list != null && list.isNotEmpty) {
+        var user = list[0];
+        function(user);
+      } else {
+        function(null);
+      }
+    }).catchError((e) {
+      function(null);
+      print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "未知异常，请联系管理员");
+    });
+  }
 }
