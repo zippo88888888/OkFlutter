@@ -6,8 +6,8 @@ import 'package:ok_flutter/util/bmob_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
 
 class NewsInfoPageView extends StatelessWidget {
-
   final FlutterContent _flutterContent;
+
   NewsInfoPageView(this._flutterContent);
 
   @override
@@ -40,7 +40,6 @@ class _NewsInfoView extends StatefulWidget {
 }
 
 class _NewsInfoStateView extends State<_NewsInfoView> {
-
   static final _bottomHeight = 50.0;
 
   ScrollController _scrollController;

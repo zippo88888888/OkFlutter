@@ -35,14 +35,12 @@ class _MainPageView extends State<StatefulWidget>
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: () {},
+              onPressed: () => JumpUtil.jumpToSearchPage(context),
               color: Content.white,
             ),
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: () {
-                JumpUtil.jumToAddPage(context);
-              },
+              onPressed: () => JumpUtil.jumToAddPage(context),
               color: Content.white,
             )
           ],

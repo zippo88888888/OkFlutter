@@ -20,6 +20,8 @@ class SplashPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // 去掉debug logo
+      debugShowCheckedModeBanner: false,
       home: SplashPageState(),
     );
   }

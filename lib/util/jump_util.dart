@@ -6,6 +6,7 @@ import 'package:ok_flutter/ui/info.dart';
 import 'package:ok_flutter/ui/login/login.dart';
 import 'package:ok_flutter/ui/login/register.dart';
 import 'package:ok_flutter/ui/main.dart';
+import 'package:ok_flutter/ui/search.dart';
 
 // TODO 暂时性的
 /// https://blog.csdn.net/yuzhiqiang_1993/article/details/89090742
@@ -55,5 +56,10 @@ class JumpUtil {
   /// 跳转至详情页面
   static jumpToInfoPage(BuildContext context, FlutterContent flutterContent) {
     _toPage(context, NewsInfoPageView(flutterContent));
+  }
+
+  /// 跳转至搜索页面
+  static jumpToSearchPage(BuildContext context) {
+    _toPage(context, SearchPageView());
   }
 }
