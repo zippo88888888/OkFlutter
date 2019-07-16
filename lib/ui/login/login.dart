@@ -35,6 +35,9 @@ class _MyLoginPageView extends StatefulWidget {
 }
 
 class _LoginPageState extends State<StatefulWidget> {
+
+  FocusNode _pwdFocusNode = FocusNode();
+
   // 变量保存数据
   var _name = "";
   var _pwd = "";
@@ -78,7 +81,6 @@ class _LoginPageState extends State<StatefulWidget> {
               ),
               borderRadius: BorderRadius.circular(25)),
           child: TextField(
-            autocorrect: true,
             maxLines: 1,
             maxLength: 11,
             onChanged: (value) {
@@ -93,6 +95,7 @@ class _LoginPageState extends State<StatefulWidget> {
                 border: InputBorder.none),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
+            onEditingComplete: () => FocusScope.of(context).requestFocus(_pwdFocusNode),
           ),
         ),
         Stack(
@@ -110,7 +113,7 @@ class _LoginPageState extends State<StatefulWidget> {
                   ),
                   borderRadius: BorderRadius.circular(25)),
               child: TextField(
-                autocorrect: true,
+                focusNode: _pwdFocusNode,
                 maxLines: 1,
                 maxLength: 15,
                 onChanged: (value) {

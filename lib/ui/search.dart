@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
+import 'package:ok_flutter/bean/history.dart';
+import 'package:ok_flutter/bean/hot.dart';
+import 'package:ok_flutter/util/bmob_util.dart';
+import 'package:ok_flutter/util/db_util.dart';
+import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
 
 class SearchPageView extends StatefulWidget {
@@ -10,7 +15,59 @@ class SearchPageView extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPageView> {
   var _searchStr = "";
-  var _showHistoryView = false;
+
+  List<SearchHistoryBean> _historyList = [];
+  List<FlutterHotNews> _hotList = [];
+
+  _init() {
+    BmobUtil.getHotNews(context, (list) {
+      if (list != null && list.length > 0) {
+        setState(() {
+          _hotList = list;
+        });
+      } else {
+        SystemUtil.showToast(msg: "暂无数据");
+      }
+    });
+    DatabaseHelper.getInstance().findAll((list) {
+      if (list != null && list.length > 0) {
+        setState(() {
+          _historyList = list;
+        });
+      } else {
+        print("暂无历史纪录");
+      }
+    });
+  }
+
+  _search(String searchStr, bool saveDB) {
+    if (searchStr == null || searchStr.length <= 0) {
+      SystemUtil.showToast(msg: "搜索内容不能为空");
+    } else {
+      Navigator.of(context).pop();
+      JumpUtil.jumpToSearchListPage(context, searchStr, saveDB);
+    }
+  }
+
+  _clear() {
+    if (_historyList == null || _historyList.length <= 0) {
+      SystemUtil.showToast(msg: "暂无历史搜索");
+      return;
+    }
+    DatabaseHelper.getInstance().deleteAll((del) {
+      if (del) {
+        setState(() {
+          _historyList.clear();
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,22 +81,22 @@ class _SearchPageState extends State<SearchPageView> {
           decoration: BoxDecoration(
               color: Content.white, borderRadius: BorderRadius.circular(25)),
           child: TextField(
-            autocorrect: true,
-            maxLines: 1,
-            maxLength: 50,
-            onChanged: (value) {
-              _searchStr = value;
-            },
-            style: TextStyle(color: Content.black, fontSize: 14),
-            decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 1),
-                hintText: "请输入标题",
-                hintStyle: TextStyle(color: Color(0xFFBEBEBE), fontSize: 14),
-                counterText: "",
-                border: InputBorder.none),
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.search,
-          ),
+              autocorrect: true,
+              maxLines: 1,
+              maxLength: 50,
+              onChanged: (value) {
+                _searchStr = value;
+              },
+              style: TextStyle(color: Content.black, fontSize: 14),
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 1),
+                  hintText: "请输入标题",
+                  hintStyle: TextStyle(color: Color(0xFFBEBEBE), fontSize: 14),
+                  counterText: "",
+                  border: InputBorder.none),
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.search,
+              onEditingComplete: () => _search(_searchStr, true)),
         ),
         centerTitle: false,
         leading: IconButton(
@@ -48,7 +105,7 @@ class _SearchPageState extends State<SearchPageView> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () => SystemUtil.showToast(msg: "开始搜索"),
+            onPressed: () => _search(_searchStr, true),
             color: Content.white,
           ),
         ],
@@ -60,19 +117,30 @@ class _SearchPageState extends State<SearchPageView> {
           children: <Widget>[
             Container(
               width: double.infinity,
+              height: 50,
               margin: EdgeInsets.only(bottom: 10),
               padding: EdgeInsets.only(
-                  top: Content.defaultPadding,
-                  bottom: Content.defaultPadding,
-                  left: Content.defaultPadding,
-                  right: Content.defaultPadding),
-              child: Text(
-                "搜索历史",
+                  left: Content.defaultPadding, right: Content.defaultPadding),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: <Widget>[
+                  Text("历史搜索"),
+                  Positioned(
+                    right: 0,
+                    child: GestureDetector(
+                        onTap: () => _clear(),
+                        child: SizedBox(
+                          width: 15,
+                          height: 15,
+                          child: Image.asset("assets/images/ic_del.png"),
+                        )),
+                  )
+                ],
               ),
               color: Content.white,
             ),
             Offstage(
-              offstage: _showHistoryView,
+              offstage: !(_historyList.length > 0),
               child: Container(
                 margin: EdgeInsets.only(bottom: 1),
                 padding: EdgeInsets.only(
@@ -86,32 +154,16 @@ class _SearchPageState extends State<SearchPageView> {
                   spacing: 25.0,
                   runSpacing: 10.0,
                   alignment: WrapAlignment.start,
-                  children: <Widget>[
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                    Text("标签一"),
-                  ],
+                  children: _getHistoryListWidget(),
                 ),
               ),
             ),
             Container(
               width: double.infinity,
+              alignment: Alignment(-1.0, 0.0),
+              height: 50,
               padding: EdgeInsets.only(
-                  top: Content.defaultPadding,
-                  bottom: Content.defaultPadding,
-                  left: Content.defaultPadding,
-                  right: Content.defaultPadding),
+                  left: Content.defaultPadding, right: Content.defaultPadding),
               child: Text(
                 "热门搜索",
               ),
@@ -130,34 +182,7 @@ class _SearchPageState extends State<SearchPageView> {
                 spacing: 25.0,
                 runSpacing: 10.0,
                 alignment: WrapAlignment.start,
-                children: <Widget>[
-                  _getTagWidget(1),
-                  _getTagWidget(10),
-                  _getTagWidget(100),
-                  _getTagWidget(1000),
-                  _getTagWidget(10000),
-                  _getTagWidget(100000),
-                  _getTagWidget(1000000),
-                  _getTagWidget(100000),
-                  _getTagWidget(10000),
-                  _getTagWidget(1000),
-                  _getTagWidget(100),
-                  _getTagWidget(10),
-                  _getTagWidget(1),
-                  _getTagWidget(1),
-                  _getTagWidget(10),
-                  _getTagWidget(100),
-                  _getTagWidget(1000),
-                  _getTagWidget(10000),
-                  _getTagWidget(100000),
-                  _getTagWidget(1000000),
-                  _getTagWidget(100000),
-                  _getTagWidget(10000),
-                  _getTagWidget(1000),
-                  _getTagWidget(100),
-                  _getTagWidget(10),
-                  _getTagWidget(1),
-                ],
+                children: _getTagListWidget(),
               ),
             ),
             Container(height: 20)
@@ -167,11 +192,25 @@ class _SearchPageState extends State<SearchPageView> {
     ));
   }
 
-  Widget _getTagWidget(int position) {
+  List<Widget> _getHistoryListWidget() {
+    List<Widget> list = [];
+    for (int i = 0; i < _historyList.length; i++) {
+      list.add(_getTagWidget(i, _historyList[i].title));
+    }
+    return list;
+  }
+
+  List<Widget> _getTagListWidget() {
+    List<Widget> list = [];
+    for (int i = 0; i < _hotList.length; i++) {
+      list.add(_getTagWidget(i, _hotList[i].hotNewsTitle));
+    }
+    return list;
+  }
+
+  Widget _getTagWidget(int position, String title) {
     return GestureDetector(
-      onTap: () {
-        SystemUtil.showToast(msg: "item$position");
-      },
+      onTap: () => _search(title, false),
       child: Container(
         padding: EdgeInsets.only(left: 10, right: 10, top: 6, bottom: 6),
         decoration: BoxDecoration(
@@ -179,7 +218,7 @@ class _SearchPageState extends State<SearchPageView> {
             color: Content.white,
             borderRadius: BorderRadius.circular(5)),
         child: Text(
-          "我是item$position",
+          title,
           style: TextStyle(color: Colors.grey[500], fontSize: 13),
         ),
       ),

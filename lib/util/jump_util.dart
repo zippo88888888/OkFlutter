@@ -7,6 +7,7 @@ import 'package:ok_flutter/ui/login/login.dart';
 import 'package:ok_flutter/ui/login/register.dart';
 import 'package:ok_flutter/ui/main.dart';
 import 'package:ok_flutter/ui/search.dart';
+import 'package:ok_flutter/ui/search_list.dart';
 
 // TODO 暂时性的
 /// https://blog.csdn.net/yuzhiqiang_1993/article/details/89090742
@@ -26,13 +27,13 @@ class JumpUtil {
     _toPage(context, new LoginPageView());
   }
 
-  // TODO 这样做因为之前没找到对的BuildContext，阿西吧 Flutter里面全叫context，后面再修改吧
+  // TODO 这样做因为之前没找到对的BuildContext，阿西吧 Flutter里面参数全叫context，后面再修改吧
   /// 跳转至登录页面
   static jumpToLoginPage2(BuildContext context) {
     Navigator.pushAndRemoveUntil(
         context,
         new MaterialPageRoute(builder: (context) => new LoginPageView()),
-            (dismiss) => dismiss == null);
+        (dismiss) => dismiss == null);
   }
 
   /// 跳转至首页
@@ -45,7 +46,7 @@ class JumpUtil {
     Navigator.pushAndRemoveUntil(
         context,
         new MaterialPageRoute(builder: (context) => new MainPageView()),
-            (dismiss) => dismiss == null);
+        (dismiss) => dismiss == null);
   }
 
   /// 跳转至添加页面
@@ -61,5 +62,10 @@ class JumpUtil {
   /// 跳转至搜索页面
   static jumpToSearchPage(BuildContext context) {
     _toPage(context, SearchPageView());
+  }
+
+  /// 跳转至搜索结果页
+  static jumpToSearchListPage(BuildContext context, String title, bool saveDB) {
+    _toPage(context, SearchListPageView(title, saveDB));
   }
 }

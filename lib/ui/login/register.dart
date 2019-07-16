@@ -16,7 +16,9 @@ class RegisterPageView extends StatelessWidget {
           "注册",
           style: Content.titleStyle,
         ),
-        leading: BackButton(),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context)),
         centerTitle: true,
         backgroundColor: Content.baseColor,
       ),
@@ -40,6 +42,9 @@ class _RegisterPageState extends State<StatefulWidget> {
 
   final BuildContext __context;
   _RegisterPageState(this.__context);
+
+  FocusNode _pwdFocusNode = FocusNode();
+  FocusNode _ageFocusNode = FocusNode();
 
   var _nameCanUser = true;
   var _borderColor = Color(0xFFBEBEBE);
@@ -137,7 +142,6 @@ class _RegisterPageState extends State<StatefulWidget> {
               ),
               borderRadius: BorderRadius.circular(25)),
           child: TextField(
-            autocorrect: true,
             maxLines: 1,
             maxLength: 11,
             onChanged: (value) => _checkUserName(value),
@@ -149,6 +153,7 @@ class _RegisterPageState extends State<StatefulWidget> {
                 border: InputBorder.none),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
+            onEditingComplete: () => FocusScope.of(context).requestFocus(_pwdFocusNode),
           ),
         ),
         Stack(
@@ -166,7 +171,7 @@ class _RegisterPageState extends State<StatefulWidget> {
                   ),
                   borderRadius: BorderRadius.circular(25)),
               child: TextField(
-                autocorrect: true,
+                focusNode: _pwdFocusNode,
                 maxLines: 1,
                 maxLength: 15,
                 onChanged: (value) {
@@ -183,6 +188,7 @@ class _RegisterPageState extends State<StatefulWidget> {
                 keyboardType: TextInputType.emailAddress,
                 obscureText: _obscureText,
                 textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).requestFocus(_ageFocusNode),
               ),
             ),
             Positioned(
@@ -213,7 +219,7 @@ class _RegisterPageState extends State<StatefulWidget> {
               ),
               borderRadius: BorderRadius.circular(25)),
           child: TextField(
-            autocorrect: true,
+            focusNode: _ageFocusNode,
             maxLines: 1,
             maxLength: 2,
             onChanged: (value) {

@@ -4,6 +4,7 @@ import 'package:data_plugin/bmob/bmob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
+import 'package:ok_flutter/util/db_util.dart';
 import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/util/preferences.dart';
 import 'package:ok_flutter/util/user_util.dart';
@@ -13,6 +14,7 @@ import 'login/register.dart';
 void main() {
   Bmob.init(Content.appId, Content.apiKey);
   SPUtil.initSharedPreferences();
+  DatabaseHelper.getInstance().init();
   runApp(SplashPageView());
 }
 

@@ -56,6 +56,7 @@ flutter:
     - assets/images/ic_login_look_pwd.png
     - assets/images/ic_login_look_pwd2.png
     - assets/images/ic_login_logo.png
+    - assets/images/ic_del.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

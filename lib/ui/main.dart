@@ -64,7 +64,7 @@ class _MainPageView extends State<StatefulWidget>
   List<Widget> _createTabBarView() {
     List<Widget> child = [];
     for (int i = 0; i < _tabs.length; i++) {
-      child.add(RecyclerView(_tabs[i], i));
+      child.add(RecyclerView("", i));
     }
     return child;
   }

@@ -10,18 +10,18 @@ import 'package:ok_flutter/util/else_util.dart';
 
 // TODO 封装成通用的  类似Adapter ？？？
 class RecyclerView extends StatefulWidget {
-  final String title;
-  final int position;
+  final String _title;
+  final int _position;
 
-  RecyclerView(this.title, this.position);
+  RecyclerView(this._title, this._position);
 
   @override
   State<StatefulWidget> createState() => _RecyclerView();
 }
 
 /// https://juejin.im/post/5b73c3b3f265da27d701473a
-class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMixin  {
-
+class _RecyclerView extends State<RecyclerView>
+    with AutomaticKeepAliveClientMixin {
   /// TabBarView 保持状态需要 让 TabBarView 的child 继承自 AutomaticKeepAliveClientMixin
   /// 实现 wantKeepAlive 返回true即可让其不会每次切换后 Widget重新绘制
   @override
@@ -39,7 +39,7 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
     _pageNo = 1;
     _canLoadMore = true;
     await Future.delayed(Duration(milliseconds: 300), () {
-      BmobUtil.getNewsData(_pageNo, "", widget.position == 1,
+      BmobUtil.getNewsData(_pageNo, widget._title, widget._position == 1,
           (isSuccess, list) {
         if (isSuccess) {
           if (list != null && list.length > 0) {
@@ -52,6 +52,9 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
             setState(() {
               _canLoadMore = false;
               _datas.clear();
+              if (widget._title != null && widget._title.length > 0) {
+                _showNoDataDialogBySearch(widget._title);
+              }
             });
           }
         } else {
@@ -73,7 +76,7 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
     }
     if (needJJ) _pageNo++;
     await Future.delayed(Duration(milliseconds: 300), () {
-      BmobUtil.getNewsData(_pageNo, "", widget.position == 1,
+      BmobUtil.getNewsData(_pageNo, widget._title, widget._position == 1,
           (isSuccess, list) {
         if (isSuccess) {
           if (list != null && list.length > 0) {
@@ -134,11 +137,15 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
         onTap: () {
           JumpUtil.jumpToInfoPage(context, _datas[position]);
         },
-        child: Padding(padding: EdgeInsets.only(
-            left: Content.defaultPadding,
-            right: Content.defaultPadding,
-            top: 2,
-            bottom: 2),child: Card(elevation: 2.0, child: _bindViewHolder(context, position)),),
+        child: Padding(
+          padding: EdgeInsets.only(
+              left: Content.defaultPadding,
+              right: Content.defaultPadding,
+              top: 2,
+              bottom: 2),
+          child:
+              Card(elevation: 2.0, child: _bindViewHolder(context, position)),
+        ),
       );
     }
   }
@@ -160,14 +167,18 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
                   color: Content.black,
                   fontWeight: FontWeight.bold),
             ),
-            Padding(padding: EdgeInsets.all(2.5),),
+            Padding(
+              padding: EdgeInsets.all(2.5),
+            ),
             Text(
               itemData.newsContent,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
               style: _getItemTextStyle(),
             ),
-            Padding(padding: EdgeInsets.all(2.5),),
+            Padding(
+              padding: EdgeInsets.all(2.5),
+            ),
             Flex(
               direction: Axis.horizontal,
               children: <Widget>[
@@ -232,5 +243,22 @@ class _RecyclerView extends State<RecyclerView> with AutomaticKeepAliveClientMix
         ),
       );
     }
+  }
+
+  void _showNoDataDialogBySearch(String title) {
+    showDialog(
+        context: context,
+        builder: (_context) => AlertDialog(
+          title: Text('温馨提示'),
+          content: Text(('未找到关于【$title】相关信息！')),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("我知道了"),
+              onPressed: () {
+                Navigator.of(_context).pop();
+              },
+            ),
+          ],
+        ));
   }
 }

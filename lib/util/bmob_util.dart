@@ -2,6 +2,7 @@ import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:data_plugin/bmob/response/bmob_error.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ok_flutter/base/content.dart';
+import 'package:ok_flutter/bean/hot.dart';
 import 'package:ok_flutter/bean/news.dart';
 import 'package:ok_flutter/bean/user.dart';
 import 'package:ok_flutter/util/system_util.dart';
@@ -173,7 +174,7 @@ class BmobUtil {
         content.likeCount = likeCount + 1;
         content.update().then((bmobUpdated) {
           SystemUtil.showToast(msg: "点赞成功");
-        }).catchError((e){
+        }).catchError((e) {
           print(BmobError.convert(e).error);
           SystemUtil.showToast(msg: "未知异常，请联系管理员");
         });
@@ -184,12 +185,11 @@ class BmobUtil {
       print(BmobError.convert(e).error);
       SystemUtil.showToast(msg: "未知异常，请联系管理员");
     });
-
   }
 
   /// 根据用户ID获取用户信息   不连表查询了
-  static void getUserById(BuildContext context, int userId,
-      Function(FlutterUser) function) {
+  static void getUserById(
+      BuildContext context, int userId, Function(FlutterUser) function) {
     BmobQuery<FlutterUser> query = BmobQuery();
     query.addWhereEqualTo("userId", userId);
     query.queryObjects().then((data) {
@@ -200,6 +200,20 @@ class BmobUtil {
       } else {
         function(null);
       }
+    }).catchError((e) {
+      function(null);
+      print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "未知异常，请联系管理员");
+    });
+  }
+
+  /// 获取热点搜索数据
+  static void getHotNews(
+      BuildContext context, Function(List<FlutterHotNews>) function) {
+    BmobQuery<FlutterHotNews> query = BmobQuery();
+    query.queryObjects().then((data) {
+      var list = data.map((i) => FlutterHotNews.fromJson(i)).toList();
+      function(list);
     }).catchError((e) {
       function(null);
       print(BmobError.convert(e).error);
