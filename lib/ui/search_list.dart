@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ok_flutter/base/content.dart';
+import 'package:ok_flutter/base/base.dart';
 import 'package:ok_flutter/bean/history.dart';
 import 'package:ok_flutter/util/db_util.dart';
 import 'package:ok_flutter/widget/recyclerview.dart';
 
 class SearchListPageView extends StatefulWidget {
-
   final String _title;
   final bool _saveDB;
 
@@ -17,7 +16,6 @@ class SearchListPageView extends StatefulWidget {
 }
 
 class _SearchListPageState extends State<SearchListPageView> {
-
   _saveToDB() {
     if (widget._saveDB != null && widget._saveDB) {
       var bean = SearchHistoryBean();
@@ -35,20 +33,9 @@ class _SearchListPageState extends State<SearchListPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "搜索结果",
-            style: Content.titleStyle,
-          ),
-          centerTitle: true,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context)),
-        ),
-        body: RecyclerView(widget._title, 0),
-      ),
+    return ToolBar(
+      title: "搜索结果",
+      body: RecyclerView(widget._title, 0),
     );
   }
 }

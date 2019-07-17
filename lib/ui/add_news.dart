@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ok_flutter/base/base.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/util/bmob_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
@@ -7,29 +8,18 @@ import 'package:ok_flutter/util/system_util.dart';
 class AddNewsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "添加",
-            style: Content.titleStyle,
-          ),
-          centerTitle: true,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context)),
-        ),
-        body: SingleChildScrollView(
-          child: _AddNewsContentView(context),
-        ),
+    return ToolBar(
+      title: "添加",
+      body: SingleChildScrollView(
+        child: _AddNewsContentView(context),
       ),
     );
   }
 }
 
 class _AddNewsContentView extends StatefulWidget {
-
   final BuildContext __context;
+
   _AddNewsContentView(this.__context);
 
   @override

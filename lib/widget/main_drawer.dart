@@ -20,14 +20,14 @@ class _MainDrawerState extends State<StatefulWidget> {
 
   final List<MainNVItemBean> _items = List<MainNVItemBean>();
 
-  final double _itemPicWH = 28.0;
+  final double _itemPicWH = 25.0;
 
   _init() {
     var icon = UserUtil.getIcon();
     if (icon != null && icon.length > 0 && "null" != icon) {
       _userIcon = icon;
     } else {
-      _userIcon = Content.userIcon1;
+      _userIcon = Content.userIcon2;
     }
     var name = UserUtil.getName();
     _userName = name ?? "OKFlutter";
@@ -39,23 +39,23 @@ class _MainDrawerState extends State<StatefulWidget> {
     } else {
       _createTime = "2019年7月加入";
     }
-    _items.add(MainNVItemBean(Content.mm, "个人信息"));
-    _items.add(MainNVItemBean(Content.mm, "主题更换"));
-    _items.add(MainNVItemBean(Content.mm, "关于"));
-    _items.add(MainNVItemBean(Content.mm, "开源库"));
-    _items.add(MainNVItemBean(Content.mm, "退出登录"));
+    _items.add(MainNVItemBean("assets/images/ic_my.png", "个人信息"));
+    _items.add(MainNVItemBean("assets/images/ic_study.png", "练习"));
+    _items.add(MainNVItemBean("assets/images/ic_about.png", "关于"));
+    _items.add(MainNVItemBean("assets/images/ic_ku.png", "开源库"));
+    _items.add(MainNVItemBean("assets/images/ic_exit.png", "退出登录"));
   }
 
   _onItemClick(int position) {
     switch (position) {
       case 0:
-        SystemUtil.showToast(msg: "个人信息");
+        JumpUtil.jumpToMyPage(context);
         break;
       case 1:
-        SystemUtil.showToast(msg: "主题更换");
+        SystemUtil.showToast(msg: "练习");
         break;
       case 2:
-        SystemUtil.showToast(msg: "关于");
+        JumpUtil.jumpToAboutPage(context);
         break;
       case 3:
         SystemUtil.showToast(msg: "开源库");

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/ui/login/register.dart';
 import 'package:ok_flutter/util/bmob_util.dart';
-import 'package:ok_flutter/util/jump_util.dart';
 import 'package:ok_flutter/util/system_util.dart';
 import 'package:ok_flutter/util/user_util.dart';
 
@@ -35,7 +34,6 @@ class _MyLoginPageView extends StatefulWidget {
 }
 
 class _LoginPageState extends State<StatefulWidget> {
-
   FocusNode _pwdFocusNode = FocusNode();
 
   // 变量保存数据
@@ -95,7 +93,8 @@ class _LoginPageState extends State<StatefulWidget> {
                 border: InputBorder.none),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
-            onEditingComplete: () => FocusScope.of(context).requestFocus(_pwdFocusNode),
+            onEditingComplete: () =>
+                FocusScope.of(context).requestFocus(_pwdFocusNode),
           ),
         ),
         Stack(
@@ -123,8 +122,7 @@ class _LoginPageState extends State<StatefulWidget> {
                     hintText: "请输入密码",
                     hintStyle:
                         TextStyle(color: Color(0xFFBEBEBE), fontSize: 13),
-                    labelStyle:
-                        TextStyle(color: Content.black, fontSize: 13),
+                    labelStyle: TextStyle(color: Content.black, fontSize: 13),
                     counterText: "",
                     border: InputBorder.none),
                 keyboardType: TextInputType.emailAddress,

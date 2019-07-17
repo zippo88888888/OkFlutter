@@ -30,6 +30,7 @@ class Content {
   static const bg1 = "assets/images/ic_nv_bg1.jpg";
   static const bg2 = "assets/images/ic_nv_bg2.jpg";
   static const userIcon1 = "assets/images/ic_user_icon1.jpg";
+  static const userIcon2 = "assets/images/ic_user_icon2.png";
   static const gg = "assets/images/ic_gg.png";
   static const mm = "assets/images/ic_mm.png";
 }

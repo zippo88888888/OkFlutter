@@ -7,6 +7,7 @@ import 'package:ok_flutter/bean/news.dart';
 import 'package:ok_flutter/bean/user.dart';
 import 'package:ok_flutter/util/system_util.dart';
 import 'package:ok_flutter/util/user_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'jump_util.dart';
 
@@ -216,6 +217,26 @@ class BmobUtil {
       function(list);
     }).catchError((e) {
       function(null);
+      print(BmobError.convert(e).error);
+      SystemUtil.showToast(msg: "未知异常，请联系管理员");
+    });
+  }
+
+  /// 获取用户信息
+  static void getUserInfo(Function(FlutterUser) function) {
+    BmobQuery<FlutterUser> query = BmobQuery();
+    query.addWhereEqualTo("userId", UserUtil.getUserId());
+    query.queryObjects().then((data) {
+      var list = data.map((i) => FlutterUser.fromJson(i)).toList();
+      if (list != null && list.isNotEmpty) {
+        var user = list[0];
+        function(user);
+      } else {
+        if (function != null) function(null);
+        SystemUtil.showToast(msg: "未找到该用户！");
+      }
+    }).catchError((e) {
+      if (function != null) function(null);
       print(BmobError.convert(e).error);
       SystemUtil.showToast(msg: "未知异常，请联系管理员");
     });

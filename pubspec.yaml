@@ -51,12 +51,18 @@ flutter:
     - assets/images/ic_nv_bg1.jpg
     - assets/images/ic_nv_bg2.jpg
     - assets/images/ic_user_icon1.jpg
+    - assets/images/ic_user_icon2.png
     - assets/images/ic_gg.png
     - assets/images/ic_mm.png
     - assets/images/ic_login_look_pwd.png
     - assets/images/ic_login_look_pwd2.png
     - assets/images/ic_login_logo.png
     - assets/images/ic_del.png
+    - assets/images/ic_about.png
+    - assets/images/ic_exit.png
+    - assets/images/ic_ku.png
+    - assets/images/ic_my.png
+    - assets/images/ic_study.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

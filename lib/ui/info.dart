@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ok_flutter/base/base.dart';
 import 'package:ok_flutter/base/content.dart';
 import 'package:ok_flutter/bean/news.dart';
 import 'package:ok_flutter/util/bmob_util.dart';
@@ -12,21 +13,12 @@ class NewsInfoPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "详情",
-                style: Content.titleStyle,
-              ),
-              centerTitle: true,
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context)),
-            ),
-            body: ConstrainedBox(
-                constraints: BoxConstraints.expand(),
-                child: _NewsInfoView(_flutterContent))));
+    return ToolBar(
+      title: "详情",
+      body: ConstrainedBox(
+          constraints: BoxConstraints.expand(),
+          child: _NewsInfoView(_flutterContent)),
+    );
   }
 }
 

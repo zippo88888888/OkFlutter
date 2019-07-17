@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ok_flutter/bean/news.dart';
 import 'package:ok_flutter/ui/add_news.dart';
+import 'package:ok_flutter/ui/else/about.dart';
 import 'package:ok_flutter/ui/info.dart';
 import 'package:ok_flutter/ui/login/login.dart';
 import 'package:ok_flutter/ui/login/register.dart';
 import 'package:ok_flutter/ui/main.dart';
+import 'package:ok_flutter/ui/my.dart';
 import 'package:ok_flutter/ui/search.dart';
 import 'package:ok_flutter/ui/search_list.dart';
 
@@ -67,5 +69,15 @@ class JumpUtil {
   /// 跳转至搜索结果页
   static jumpToSearchListPage(BuildContext context, String title, bool saveDB) {
     _toPage(context, SearchListPageView(title, saveDB));
+  }
+
+  /// 跳转至个人资料界面
+  static jumpToMyPage(BuildContext context) {
+    _toPage(context, MyPageView());
+  }
+
+  /// 跳转至关于界面
+  static jumpToAboutPage(BuildContext context) {
+    _toPage(context, AboutPageView());
   }
 }
